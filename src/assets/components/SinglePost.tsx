@@ -1,11 +1,11 @@
 // @ts-expect-error: React not used
 import React from "react";
 
-function SinglePost() {
+function SinglePost({ title, body }: { title: string; body: string }) {
   return (
     <div blog-post>
-      <h3>Title</h3>
-      <p>details</p>
+      <h3>{title}</h3>
+      <p>{body}</p>
     </div>
   );
 }
