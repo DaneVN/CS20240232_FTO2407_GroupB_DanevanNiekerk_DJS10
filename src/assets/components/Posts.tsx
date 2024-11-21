@@ -1,5 +1,6 @@
 import React from "react";
 import SinglePost from "./SinglePost";
+import { Post } from "../interfaces/Post";
 
 function Posts() {
   //logic for api call and data fetching
@@ -8,13 +9,6 @@ function Posts() {
     { userId: number; id: number; title: string; body: string }[]
   >([]);
   const [loading, setLoading] = React.useState<boolean>(true);
-
-  interface Post {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-  }
 
   React.useEffect(() => {
     // Fetch data when the component mounts
