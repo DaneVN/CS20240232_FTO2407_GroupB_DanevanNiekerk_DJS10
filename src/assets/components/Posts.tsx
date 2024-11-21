@@ -7,6 +7,7 @@ function Posts() {
   const [posts, setPosts] = React.useState<
     { userId: number; id: number; title: string; body: string }[]
   >([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   interface Post {
     userId: number;
@@ -33,6 +34,8 @@ function Posts() {
         } else {
           setError("An unexpected error occurred");
         }
+      } finally {
+        setLoading(false);
       }
     }
     fetchPosts();
@@ -40,6 +43,7 @@ function Posts() {
 
   return (
     <>
+      {loading && <h2>Loading...</h2>}
       {error && (
         <div api-error>
           <h2>Something went wrong with the server:</h2>
@@ -48,14 +52,10 @@ function Posts() {
       )}
 
       {/* Render the list of posts */}
-      {!error && (
+      {!loading && !error && (
         <div>
           {posts.map((post) => (
-            <SinglePost
-              key={post.id}
-              title={`${post.id}. ${post.title}`}
-              body={post.body}
-            />
+            <SinglePost title={`${post.id}. ${post.title}`} body={post.body} />
           ))}
         </div>
       )}
