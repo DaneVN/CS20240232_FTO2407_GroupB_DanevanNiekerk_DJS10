@@ -40,8 +40,9 @@ function Posts() {
       {loading && <h2>Loading...</h2>}
       {error && (
         <div api-error>
-          <h2>Something went wrong with the server:</h2>
-          <h4>{error}</h4>
+          {/* <h2>Something went wrong with the server:</h2>
+          <h4>{error}</h4> */}
+          <h2>Data fetching failed</h2>
         </div>
       )}
 
