@@ -1,10 +1,5 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 
-createRoot(document.querySelector("[blog-container]")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+createRoot(document.querySelector("[blog-container]")!).render(<App />);

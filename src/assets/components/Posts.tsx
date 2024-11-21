@@ -1,9 +1,12 @@
-import { useState } from "react";
+import React from "react";
 import SinglePost from "./SinglePost";
 
 function Posts() {
   //logic for api call and data fetching
-  const [error, setError] = useState(null);
+  const [error, setError] = React.useState<string | null>(null);
+  const [posts, setPosts] = React.useState<
+    { userId: number; id: number; title: string; body: string }[]
+  >([]);
 
   interface Post {
     userId: number;
@@ -12,35 +15,48 @@ function Posts() {
     body: string;
   }
 
-  async function createPosts() {
-    await fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Responce came back not ok");
-        } else {
-          return res.json();
+  React.useEffect(() => {
+    // Fetch data when the component mounts
+    async function fetchPosts() {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/posts"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch posts");
         }
-      })
-      .then((data) => {
-        return data.map((item: Post) => (
-          <SinglePost
-            title={`${item.id}. ${item.title}`}
-            body={item.body}
-          ></SinglePost>
-        ));
-      })
-      .catch((err) => {
-        setError(err);
-      });
-  }
+        const data: Post[] = await response.json();
+        setPosts(data); // Update state with the fetched posts
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message); // Set error message
+        } else {
+          setError("An unexpected error occurred");
+        }
+      }
+    }
+    fetchPosts();
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
     <>
-      {createPosts()}
       {error && (
         <div api-error>
-          <h2>Looks like something went wrong with the server.</h2>
-          <h4> Please try again in a few minutes.</h4>
+          <h2>Something went wrong with the server:</h2>
+          <h4>{error}</h4>
+        </div>
+      )}
+
+      {/* Render the list of posts */}
+      {!error && (
+        <div>
+          {posts.map((post) => (
+            <SinglePost
+              key={post.id}
+              title={`${post.id}. ${post.title}`}
+              body={post.body}
+            />
+          ))}
         </div>
       )}
     </>
